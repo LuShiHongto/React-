@@ -1,0 +1,1026 @@
+解决Antd组件国际化中文问题
+
+    //在需要国际化的组件引入，样式
+    //在全局引入有可能出现部分组件不起作用，需要单独引入
+    import { LocaleProvider } from 'antd';
+    import zhCN from 'antd/lib/locale-provider/zh_CN';
+    import 'moment/locale/zh-cn';
+
+    //使用LocaleProvider在最外层包起来
+    <LocaleProvider locale={zhCN}>
+         <App />
+    </LocaleProvider>
+
+文本与input平齐
+
+    //在需要对齐的两个容器添加样式
+    vertical-align:middle;
+
+在需要对其的文本与input添加改样式，切记勿加行高，否则无效。
+
+获取当前网络状态（包括有线无线）
+
+    console.log(navigator.onLine)
+    //false为没网
+    //true为有网
+
+react cookie用法
+
+- 先下载模块
+
+    cnpm install  react-cookies --save-dev
+
+- 引入
+
+    import cookie from 'react-cookies'
+
+- 存入cookie
+
+    cookie.save('userId', this.state.value)；
+
+- 删除cookie
+
+    cookie.remove('userId')
+
+- 获取cookie
+
+    select([regex])
+    this.state =  { userId: cookie.load('userId') };
+
+- 给cookie设置期限
+
+     var inFifteenMinutes = new Date(new Date().getTime() + 24 * 3600 * 1000);//一天
+     cookie.save('userId', this.state.value,{ expires: inFifteenMinutes })；
+
+react localStorage 的使用
+
+- 无需下载模块
+- 添加localStorage 
+
+    localStorage.setItem("phone", account)
+
+- 删除localStorage 
+
+    localStorage.removeItem('phone');
+
+- 获取localStorage 
+
+    localStorage.getItem("phone")
+
+对象存储
+
+存：
+
+    var obj = {"name":"xiaoming","age":"16"}
+    
+    localStorage.setItem("userInfo",JSON.stringify(obj));
+
+取：
+
+    var user = JSON.parse(localStorage.getItem("userInfo"))
+
+删除：
+
+    localStorage.remove("userInfo);
+
+清空：
+
+    localStorage.clear(); 
+
+
+
+获取系统时间年月日时分秒
+
+    var now = new Date();
+            var year = now.getFullYear();       //年
+            var month = now.getMonth() + 1;     //月
+            var day = now.getDate();            //日
+            var hh = now.getHours();            //时
+            var mm = now.getMinutes();          //分
+            var ss = now.getSeconds();           //秒
+            var clock = year + "-";
+            if (month < 10)
+                clock += "0";
+            clock += month + "-";
+            if (day < 10)
+                clock += "0";
+            clock += day + " ";
+            if (hh < 10)
+                clock += "0";
+            clock += hh + ":";
+            if (mm < 10) clock += '0';
+            clock += mm + ":";
+            if (ss < 10) clock += '0';
+            clock += ss;
+            this.setState({ seconds: clock })
+          //获取周几
+            var now = new Date();
+            var day = now.getDay();
+            var weeks = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+            var week = weeks[day];
+
+数组操作
+
+    //slice();数据截取方法，可截取数组
+    mechanical.slice(0，3)
+    //splice();删除数组某段
+    mechanical.splice（index,add）index:删除的位置；add：0为不删除，1为删除当前条
+    //每两个一组切割数组
+    var result=[];
+    for (var i = 0; i < data.spList.length; i += 2) {
+      result.push(data.spList.slice(i, i + 2));
+    }
+    //一个数组包含指定的值
+    let site = ['runoob', 'google', 'taobao'];
+    site.includes('runoob'); 
+    // true 
+    site.includes('baidu'); 
+    // false
+
+正则只能是数字类型
+
+    （!/^\+?[1-9][0-9]*$/.test(正则的对象)）
+
+常用获取DOM节点
+
+    delete(e) {
+            const index = e.target.getAttribute("data-index");//获取匹配data-index的值
+            const id = e.target.parentNode.parentNode;//获取上一级父节点
+        }
+
+
+
+文件上传功能
+
+第一步：使用ref添加方法
+
+    <input ref={this.fileInput} className="l-input" type="file"/>
+
+第二步
+
+     constructor(props) {
+            super(props)
+            this.props = props;
+            this.state = {
+                
+            }
+            this.fileInput = React.createRef();
+        }
+
+第三部：方法的具体操作
+
+    save() {
+            const data = new FormData();
+            //相当于 input:file 中的name属性
+            data.append('upload', this.fileInput.current.files[0]);  
+            fetch('http://168.168.190.40:4327/jp/portal/bim/yuebao/getFile.action', {
+                body: data, // 必须匹配“内容类型”标题
+                cache: 'no-cache', // *默认，无缓存，重载，强制缓存，单if缓存
+                credentials: 'same-origin', // 包括同源*省略
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // 同源策论
+                redirect: 'follow', // manual, *follow, error
+                referrer: 'no-referrer', // *client, no-referrer
+    
+            }).then(response => console.log(response))
+        }
+
+路由跳转的几种方法
+
+1.标签跳转
+
+
+
+    //1.引入依赖
+    import { Link  } from 'react-router-dom'
+
+    //2.在需要的地方加上这段，Link标签是a标签
+    <Link to={{ pathname: /*你的路由*/ }} replace> </Link>
+
+2.事件跳转
+
+    //1.引入依赖
+    import { withRouter } from 'react-router-dom'
+
+    //2.比如使用点击事件
+    事件(){
+        this.props.history.push('/*你的路由*/')
+      }
+
+组件传参
+
+1.父子传参
+
+    //父组件下在标签上输入传递的参数
+    <Logo tab={this.state.zhuzhu}></Logo>
+    
+    //子组件在props接收
+
+2.子父传参
+
+    子组件：
+    //使用事件触发函数
+    <span onClick={this.submit.bind(this)}>123</span>
+    //事件函数通过props触发父组件回调函数
+    submit(){
+    		var usrName = this.state.usrName;
+    		this.props.onSubmit(usrName)
+      }
+    父组件：
+    //父组件标签下创建函数等待子组件触发
+    <About onSubmit={this.printContent.bind(this)}></About>
+    //回调触发函数，完成子父传参
+    printContent(comments){
+    	console.log(comments)
+      }
+
+3.兄弟传参，发布订阅模式（父子，子父都可用）
+
+    //引入封装好的js
+    import store from '../../lib/store.js'
+    //emit发送
+    submit(){
+    	store.emit("show",usrName+1);
+      }
+    //on接收
+    componentWillMount(){
+    		store.on("show",(data)=>{
+    			console.log(data)
+    		})
+    	})
+    
+
+回退goback()用法
+
+    ===========后退=========
+    goback(){
+          this.props.history.goBack()  
+      }
+    ===========前进========
+     push(){
+          this.props.history.push()  
+      }
+    备注：需要写个点击事件
+    
+
+封装axios代理版（缺点：因为使用代理，打包后访问后台接口404）
+
+    */http://168.168.190.99:8082/jp/login.action*/完整url示例
+    
+
+1.在package.json中配置
+
+    //通常写在最下边写入需要代理的地址
+    "proxy":"http://168.168.190.99:8082"
+    
+
+2.配置的重点，将方法封装
+
+    import axios from 'axios'
+    import qs from 'qs'
+    let http = {
+        post: "",
+        get: ""
+    }
+    http.post = function (api, data) {
+        let params = qs.stringify(data)
+        return new Promise((resolve, reject) => {
+            axios.post(api, params)
+                .then((res) => {
+                    resolve(res)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+        })
+    }
+    http.get = function (api, data) {
+        let params = qs.stringify(data)
+        return new Promise((resolve, reject) => {
+            axios.post(api, params)
+                .then((res) => {
+                    resolve(res)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+        })
+    }
+    export default http
+    
+
+3.使用
+
+    1.首先引入封装好的代码
+    import http from '../../lib/server.js'
+    2.使用
+    async getStudentList() {
+            const res = await http.post('/jp/login.action', { account: "123", password: "456" })
+            //返回值
+            console.log(res)
+        }
+    this.getStudentList()
+    
+
+封装axios无需代理
+
+    import axios from "axios";
+    import Global from './Global.js';
+    import cookie from 'react-cookies'
+    
+    // 龙哥（数据）
+    // const serverIp = "http://168.168.190.129";
+    // const serverPort = "80";
+    
+    // const serverUrl = serverIp + ":" + serverPort;
+    // axios.defaults.baseURL = serverUrl;
+    
+    axios.defaults.timeout = 20000;           //超时时间
+    axios.defaults.retry = 3;                 //请求次数
+    axios.defaults.retryDelay = 1000;         //请求间隙
+    axios.defaults.withCredentials = true;
+    
+    //-----------------------------请求拦截
+    axios.interceptors.request.use(
+      function (config) {
+        var tokenstring = cookie.load('tokenstring')
+        var jwtTokendata = cookie.load('jwtTokendata')
+        if (config.headers) {
+          //携带请求头
+          if (tokenstring && jwtTokendata) {
+            config.headers.common['token'] = tokenstring;
+            config.headers.common['Authorization'] = "bearer " + jwtTokendata;
+          }
+        }
+        return config;
+      },
+      function (error) {
+        return Promise.reject(error);
+      });
+    
+    //----------------------------响应拦截
+    axios.interceptors.response.use(
+      response => {
+    
+        return response;
+      }, err => {
+        // 请求超时， 重新请求
+        var config = err.config;
+        // 如果配置不存在或未设置重试选项，则拒绝
+        if (!config || !config.retry) return Promise.reject(err);
+        // 设置变量以跟踪重试计数
+        config.__retryCount = config.__retryCount || 0;
+    
+        // 检查我们是否已经将重试的总数最大化
+        if (config.__retryCount >= config.retry) {
+          // 错误回调
+          Global.prompt("warning", '服务器无响应，请联系管理员')
+          return Promise.reject(err);
+        }
+        // 增加重试计数
+        config.__retryCount += 1;
+        // 创造新的承诺，以处理指数后退
+        var backoff = new Promise(function (resolve) {
+          setTimeout(function () {
+            resolve();
+          }, config.retryDelay || 1);
+        });
+        // 返回承诺，重新发起请求
+        return backoff.then(function () {
+          return axios(config);
+        });
+      })
+    
+    /**
+     * get请求
+     * @method get
+     * @param {url, params, loading} 请求地址，请求参数，是否需要加载层
+     */
+    var get = function (url, params, loading) {
+      return new Promise((resolve, reject) => {
+        axios.get(url, params)
+          .then(res => {
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    };
+    /**
+     * post请求
+     * @method post
+     * @param {url, params,loading} 请求地址，请求参数，是否需要加载层
+     */
+    var post = function (url, data, loading) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(url, data)
+          .then(res => {
+            resolve(res);
+            // return new Promise(()=>{}); // 返回“pending”状态的Promise对象
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    };
+    export default { get, post };
+    
+    //使用方法与上述一样
+     // axios.request({
+            //     url: '/api/safety/get/standard/page?safetyStandardName=SL303-2004&pageNum=1',
+            //     method: 'get',
+            //     headers: {
+            //         Authorization: "bearer " + jwtToken,
+            //         token: token
+            //     },
+    
+            // }).then(function (data) {
+            //     console.log(data)
+            // })
+    
+
+附件携带请求头下载文件（form表单模拟）
+
+      download(params) {//params为id
+            const formElement = document.createElement('form');
+            formElement.style.display = 'display:none;';
+            formElement.method = 'post';
+            formElement.action = http.httpurl + '/jp/portal/bim/ziliao/downLoadAttach.action?docid=' + params + '&Authorization=' + cookie.load('sessionid');
+            formElement.target = 'callBackTarget';
+            const inputElement = document.createElement('input');
+            inputElement.type = 'hidden';
+            inputElement.name = 'params';
+            inputElement.value = params;
+            formElement.appendChild(inputElement);
+            document.body.appendChild(formElement);
+            formElement.submit();
+            document.body.removeChild(formElement);
+        }
+    
+
+
+
+转时间格式
+
+前提：2018-12-23T12:45:56 //后端的格式
+
+    //引入，无需下载依赖
+    import moment from "moment";
+    
+
+    //使用方法
+    {moment(Date.now(parseInt("需改格式的时间"))).format('YYYY-MM-DD')}
+    
+
+
+
+兄弟组件调用函数
+
+问题描述：前提，A，B在同一路由下，当B组件进行内容修改后，A组件需要更新
+
+    更新阶段
+    //在this.props被修改或父组件调用setProps()方法之后
+    componentWillReceiveProps(){}
+    条件：this.props发生改变或setprops发生改变，也就是使用父子组件传产或者redux后便会执行该声明周期
+    补充：因为每次props发生改变都会执行该方法，因此最好在执行函数内方法前进行判断，防止资源浪费
+    
+
+发布订阅方法补充
+
+订阅方法可以在任何被执行函数内接收参数，原理是函数回调。不可在封装方法内执行订阅被调用函数
+
+    //以下是总结出最优方案，不依赖于任何函数内
+    constructor(props) {
+            super(props)
+            this.props = props;
+            this.state = {
+                istemp: 1,
+            }
+            store.on("onSelect", (data) => {
+                console.log(data)
+                this.refs.dygcmc.value = data;
+            })
+        }
+    
+
+switch ... case ... 语句，类似if...else...的判断
+
+    //switch(判断的条件的参数)
+    switch (window.location.hash.slice(2)) {
+    		   //case "如果符合当前条件"
+                case "gim":
+                	//便执行该方法
+                    this.state.defaultSelectedKeys = 'gim0'
+                    break;
+                    
+                case "bim":
+                	//便执行该方法
+                    this.state.defaultSelectedKeys = 'gim1'
+                    break;
+                //default:以上条件都不满足
+                default:
+                    this.state.defaultSelectedKeys = 'bigs1'
+                    break;
+    ｝
+    constructor(props) {//以上方法写在该方法中
+    
+
+
+
+监听全局键盘事件
+
+    componentDidMount() {
+    
+         ow.addEventListener('keypress', function (e) {
+    
+               console.log(e.which )
+    
+          })
+    
+        
+    
+
+antd文件上传分析
+
+    //引入组件
+    import http from '../../../lib/servers.js'
+    import { Upload, Button, Icon, message } from 'antd';
+    //配置state
+    this.state = {
+    	fileList: [],     //文件列表
+    	uploading: false,//上传时状态加载上传
+    }
+    //移植自己封装的axios结合antd上传方式
+    async delete() {
+    		const { fileList } = this.state;
+    		const formData = new FormData();
+    		fileList.forEach((file) => {
+    			formData.append('files[]', file);
+    			formData.append('asd', 123);
+    		});
+    		this.setState({
+    			uploading: true,
+    		});
+    		var url = "http://168.168.190.119:8080/jp/portal/bim/system/pubrole/save.action";
+    		const res = await http.post(url, formData);
+    		if(res==="成功"){
+    			this.setState({
+    				fileList: [],
+    				uploading: false,
+    			});
+    			message.success('上传成功');
+    		}else if(res==="失败"){
+    			this.setState({
+    				uploading: false,
+    			});
+    			message.error('上传失败');
+    		}
+    	}
+    //reder中配置
+    reder(){
+        const { uploading, fileList } = this.state;//获取当前上传状态
+    		const props = {
+    			onRemove: (file) => {
+    				this.setState((state) => {
+    					const index = state.fileList.indexOf(file);
+    					const newFileList = state.fileList.slice();
+    					newFileList.splice(index, 1);
+    					return {
+    						fileList: newFileList,
+    					};
+    				});
+    			},
+    			beforeUpload: (file) => {
+    				this.setState(state => ({
+    					fileList: [...state.fileList, file],
+    				}));
+    				return false;
+    			},
+    			fileList,
+    		};
+    }
+    //组件引入位置
+    <Upload {...props}>
+        <Button>
+        <Icon type="upload" /> 添加附件
+        </Button>
+    </Upload>
+    <Button
+        type="primary"
+        onClick={this.delete.bind(this)}
+        disabled={fileList.length === 0}//当fileList为0条时无法点击上传
+        loading={uploading}//上传中加载
+        style={{ marginTop: 0 }}//头部距离
+        >
+        {uploading ? '上传' : '开始上传'}
+    </Button>
+    
+
+react优化input约束框1.0（值的获取）
+
+    //配置接收值
+    this.state = {
+    			gcmc: "",
+    			sgdw: "",
+    			bysjcz: "",
+    			ybbh: "",
+    			xmfzr: "",
+    			xyjhcz: "",
+    			htbh: "",
+    			sgrynum: "",
+    }
+    2、//多个input框共用一个方法，通过动态的方式将key与值传入state
+    changValue(key, e) {
+    		this.setState({
+    			[key]: e.target.value
+    		})
+    }
+    3、//parmas拿到的便是输入的值
+    async save() {
+    		const { gcmc, sgdw} = this.state;
+    		let parmas = {
+    			gcmc,
+    			sgdw,
+    		}
+    		//可以通过遍历的方式拿到每个key与值
+    		for (var i in parmas) {
+    			console.log(i)//key
+    			console.log(parmas[i])//值
+    		}
+    }
+    //这里拿到的是输入后的值，渲染于input框中的value
+    render() {
+    	const { gcmc, sgdw } = this.state;
+    	//onChange事件将名字传入方法中，成为key值唯一标识，多个亦如此
+    	return(
+    		<div>
+    			<input value={gcmc} onChange={this.changValue.bind(this, "gcmc")} type="text" />
+    			<input value={sgdw} onChange={this.changValue.bind(this, "sgdw")} type="text" />
+    		</div>
+    	)
+    }
+    
+    
+
+总结：往常通过refs获取，需要每个input设置ref标识逐一获取，方法繁琐。优化方法通过onChange事件传递标识，动态获取到值，此方法相对减少代码量。
+
+
+
+input数字输入框
+
+    <input type='text' onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" />
+    在失去焦点时也进行验证，因为可以用输入法输入汉字（用鼠标选取汉字）或者用鼠标进行粘贴操作
+    
+
+
+
+表格本文超出省略号代替
+
+    table{
+        table-layout:fixed;/* 只有定义了表格的布局算法为fixed，下面td的定义才能起作用。 */
+    }
+    td{
+        width:100%;
+        word-break:keep-all;/* 不换行 */
+        white-space:nowrap;/* 不换行 */
+        overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+        text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+    }
+    
+
+
+
+时间转格式
+
+    moment("2018-5-22").weekYear()；//获取当前年或传值获取年，返回值---2018	年
+    moment("2018-5-25").month()+1；//获取当前月或传值获取月，返回值---5		月
+    moment("2018-5-25").date()；//获取当前日或传值获取日，返回值---25		日
+    moment("2019-5-22").week()；//获取当前周或传值获取周，返回值---21		周
+    
+
+
+
+动画 animation	@keyframes
+
+    animation: name duration timing-function delay iteration-count direction fill-mode play-state;
+    name：指定要绑定到选择器的名字
+    duration：动画指定需要多少秒或多少毫秒
+    timing-function：设置动画将如何完成一个周期
+    delay：设置动画在启动前的延迟间隔
+    iteration-count：定义动画的播放次数
+    direction：指定是否应该轮流反向播放动画
+    fill-mode：规定动画不播放时，要应用到元素的样式
+    play-state：指定动画是否正在运行或已暂停
+    
+    
+    @keyframes animationname {keyframes-selector {css-styles;}}
+    animationname：必须的，定义animation的名称
+    keyframes-selector：必须的，动画持续的百分比
+    合法值：
+    0-100%
+    from (和0%相同)
+    to (和100%相同)
+    //案例：
+    @keyframes mymove
+    {
+    0%   {top:0px;}
+    25%  {top:200px;}
+    50%  {top:100px;}
+    75%  {top:200px;}
+    100% {top:0px;}
+    }
+    
+
+清除定时器
+
+    //定义 300毫秒后执行
+    this.nian = setTimeout(() => this.setState({ nian: false }), 300);
+    //清除
+    componentWillUnmount(){
+    	clearInterval(this.shi);
+    }
+    
+
+按钮点击效果
+
+    li:active{
+        position: relative;
+        top: 1px;
+    }
+    
+
+
+
+全屏状态下监听屏幕全屏状态
+
+    //监听事件绑定生命周期
+        componentDidMount() {
+            document.addEventListener("fullscreenchange", this.fullscreenchange);
+        }
+    //监听全屏状态
+        fullscreenchange = (e) => {
+            if (!document.webkitIsFullScreen) {
+                if (this.state.Screenbutton === true) {
+                    this.setState({
+                        Screenbutton: false
+                    })
+                }
+            }
+        }
+    //销毁监听（不销毁就内容泄漏）
+        componentWillUnmount() {
+            document.removeEventListener("fullscreenchange", this.fullscreenchange)
+       }
+    
+
+
+
+面向对象例子
+
+    //调用封装文件
+    import Gip from './Gip'
+    console.log(Gip)						//{type: 666, GzHs: ƒ, GZHy: ƒ}
+    Gip.GzHs(777)
+    Gip.type = 123
+    Gip.GZHy(Gip.type, 666)
+    console.log(Gip.GZHy(Gip.type, 666))		//789
+    
+
+
+
+    //利用对象的形式封装方法，this就是当前对象里所有东西
+    import Gips from './Gips'
+    const GzHsjson = {
+        type: 666,
+        GzHs: function (type) {
+            console.log(type + 999)			//1776
+        },
+        GZHy: function (type, name) {
+            console.log(type + name)		//789
+            console.log(this)				//{type: 123, GzHs: ƒ, GZHy: ƒ}
+            console.log(this.type)			//123
+            Gips(this)
+            return type + name;
+        }
+    }
+    
+    
+    export default GzHsjson;
+    
+
+
+
+    //对象方法的延伸
+    const GzHs = (type) => {
+        console.log(type)				//{type: 123, GzHs: ƒ, GZHy: ƒ}
+    }
+    
+    
+    export default GzHs;
+    
+
+
+
+利用面向对象传参
+
+    // 中介
+    let lyex = {
+        store: {
+            Searchrelationship: "",//关系图传递名字
+        },
+        // 事件队列
+        list: {},
+        
+        // 把函数放进队列里面，但是函数是不触发的
+        on(key, fn) {
+            if (!this.list[key]) {
+                this.list[key] = [];
+            }
+            this.list[key].push(fn);
+        },
+        
+        emit(key, param) {
+            // 取出队列
+            let fns = this.list[key];
+            // 遍历更改仓库的值
+            // for (let p in param) {
+            //     this.store[p] = param[p]
+            // }
+            if (fns) {
+                // 触发数组中的回调函数
+                fns.forEach(fn => {
+                    // 获取参数并执行
+                    fn(param);
+                });
+            }
+    
+        }
+    }
+    
+    export default lyex
+    
+    思路总结：
+    on：将所有待触发函数以key命名存入list队列中，等待触发。
+    list大致样子
+    list：{
+        key（名字）：function (data){
+            ......
+            这里是等待被触发的方法
+        }
+    }
+    emit：从list队列中取出以key命名的待执行队列，使用forEach方式逐一触发待执行函数
+    
+    
+
+ 
+
+上下布局：上方固定高度，下方自动填满。下方左侧固定宽度，右侧自动填满
+
+    <style>
+    html,
+    body { height: 100%; padding: 0; margin: 0; }
+    .outer { height: 100%; position: relative; }
+    .A { height: 100px; background: #BBE8F2; }
+    .B { background: #D9C666; width: 100%; position: absolute; top: 100px ; left: 0 ; bottom: 0; }
+    </style>
+    
+
+    <div class="outer">
+        <div class="A">
+            时空信息云平台<span>管理中心</span>
+        </div>
+        <div class="B">
+            <div class="leftp" style="width:300px;height:100%;background-color:red;float:left;">
+            </div>
+            <div class="rightp" style="margin-left:300px;height:100%">
+            </div>
+        </div>
+    </div>
+    
+
+jwt 解析
+
+    解析源：
+    var jwt= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ
+    let userString = decodeURIComponent(escape(window.atob(jwt.split('.')[1])))
+    let user = JSON.parse(userString)
+    
+
+指定元素内，获取所有img
+
+    var thediv=document.getElementById("thediv");
+    var charImg=thediv.getElementsByTagName("img");
+    
+
+
+
+同级转递归
+
+    const data1 = [
+        {
+            name: "补水支洞",
+            company: "米",
+            amount: "100",
+            start: "2019-01-08",
+            end: "2019-08-08",
+            id: "1",//自身id
+            parent: "0",//对应父节点，0最大
+            doesItExist: "1",//是否有子节点：有1，无0
+        },
+        {
+            name: "施工支洞",
+            company: "米",
+            amount: "100",
+            start: "2019-01-08",
+            end: "2019-08-08",
+            id: "2",
+            parent: "0",
+            doesItExist: "1",
+        },
+        {
+            name: "征地",
+            company: "米",
+            amount: "100",
+            start: "2019-01-08",
+            end: "2019-08-08",
+            id: "3",
+            parent: "1",
+            doesItExist: "0",
+        }
+    
+    ];
+    // ************同级转递归
+    // //找boss节点
+    // const transTreeData = (items) => {
+    //     if (items.length > 0) {
+    //         var curPid = "0" //为最上层节点 ，即无父节点
+    //         var parent = findChild(curPid, items);//数组
+    //         return parent;
+    //     } else {
+    //         return [];
+    //     }
+    // }
+    // //找子节点
+    // const findChild = (curPid, data) => {
+    //     var _arr = [];
+    //     var items = data;
+    //     var length = items.length;
+    //     for (var i = 0; i < length; i++) {
+    //         if (items[i].parent === curPid) {
+    //             var _obj = items[i];
+    //             _obj.children = findChild(_obj.id, data);
+    //             _arr.push(_obj);
+    //         }
+    //     }
+    //     return _arr;
+    // }
+    
+
+
+
+props和onRef组件通信
+
+#可以在父组件内访问整个子组件实例，并且可以调用子组件函数。
+
+    // 父组件
+    class Parent extends React.Component {
+      testRef=(ref)=>{
+        this.child = ref
+        console.log(ref) // -> 获取整个Child元素
+      }
+      handleClick=()=>{
+        alert(this.child.state.info) // -> 通过this.child可以拿到child所有状态和方法
+      }
+      render() {
+        return <div>
+          <Child onRef={this.testRef} />
+          <button onClick={this.handleClick}>父组件按钮</button>
+        </div>
+      }
+    }
+    
+
+    // 子组件
+    class Child extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          info:'快点击子组件按钮哈哈哈'
+        }
+      }
+      componentDidMount(){
+        this.props.onRef(this)
+        console.log(this) // ->将child传递给this.props.onRef()方法
+      }
+      handleChildClick=()=>{
+        this.setState({info:'通过父组件按钮获取到子组件信息啦啦啦'})
+      } 
+      render(){
+        return <button onClick={this.handleChildClick}>子组件按钮</button>
+      }
+    }
+    
+
+
